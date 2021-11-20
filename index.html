@@ -69,31 +69,44 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button onclick="consoleLog()">Console Log</button>
+      <button onclick="consoleError()">Console Error</button>
+      <button onclick="consoleCount()">Console Count</button>
+      <button onclick="consoleWarn()">Console Warn</button>
+      <button onclick="consoleAssert()">Console Assert</button>
+      <button onclick="consoleClear()">Console Clear</button>
+      <button onclick="consoleDir()">Console Dir</button>
+      <button onclick="consoleDirxml()">Console dirxml</button>
+      <button onclick="consoleGroupStart()">Console Group Start</button>
+      <button onclick="consoleGroupEnd()">Console Group End</button>
+      <button onclick="consoleTable()">Console Table</button>
+      <button onclick="consoleTime()">Start Timer</button>
+      <button onclick="consoleTimeEnd()">End Timer</button>
+      <button onclick="consoleTrace()">Console Trace</button>
+      <button onclick="triggerError()">Trigger a Global Error</button>
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({
+      token: "9271370e25994253aa8fe2a08ba45ec1"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+
+  <script>
+    TrackJS.track('Testing TrackJS!');
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
       let output = document.querySelector('output');
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
+      if (isNaN(firstNum) || isNaN(secondNum)) {
+        throw new SyntaxError("Invalid or unexpected token");
+      }
       let operator = document.querySelector('#operator').value;
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     });
@@ -102,6 +115,70 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+    function consoleLog() {
+      console.log("Console log demo");
+    }
+    function consoleError() {
+      console.error("Console error demo");
+    }
+    function consoleCount() {
+      console.count("");
+    }
+    function consoleWarn() {
+      console.warn("Console warn button");
+    }
+    function consoleAssert() {
+      console.assert(false, "Console error demo");
+    }
+    function consoleClear() {
+      console.clear();
+    }
+    function consoleDir() {
+      console.dir({ button: "Button hello" });
+    }
+    function consoleDirxml() {
+      console.error({ button: "Button hello" });
+    }
+    function consoleGroupStart() {
+      console.group();
+    }
+    function consoleGroupEnd() {
+      console.groupEnd();
+    }
+    function consoleTable() {
+      console.table({ name: "John", lastname: "Doe" });
+    }
+    function consoleTime() {
+      console.time('hello');
+    }
+    function consoleTimeEnd() {
+      console.timeEnd('hello');
+    }
+    function consoleTrace() {
+      console.trace({ deep: "deep", deeper: 'deeper' }, { hello: 'hello' });
+    }
+    function triggerError() {
+
+      try {
+        console.log(boom);
+      } catch (err) {
+        throw (err);
+      } finally {
+        console.log('boom');
+      }
+    }
+
+    class SyntaxError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "SyntaxError";
+      }
+    }
+
+
+    window.onerror = function (msg, url, lineNo, columnNo, error) {
+      console.log("Window.onerror message!!!");
+    };
   </script>
 </body>
 
